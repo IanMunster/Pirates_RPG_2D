@@ -1,0 +1,65 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PlayerMovement : Humanoid {
+
+	// Players Speed Value [Serialized for Tweaking]
+	[SerializeField] private float speed;
+	// Rigidbody
+	private Rigidbody2D rigidbodyP;
+
+	private float currentSpeed;
+	Vector2 input;
+
+	// Called At Start of Game (Even when GameObject is Disabled)
+	void Awake () {
+		//Find reference Componenets
+		rigidbodyP = GetComponent <Rigidbody2D> ();
+	}
+
+	// Called after Awake
+	void Start () {
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		input = new Vector2 (Input.GetAxis("Horizontal"),Input.GetAxis("Vertical"));
+
+	}
+
+	// FixedUpdate is called every physics-step
+	void FixedUpdate () {
+		Move ();
+		Turn ();
+	}
+
+
+	// Function to Move Player
+	void Move () {
+		Vector2 forward = transform.right * input.y * speed * Time.deltaTime;
+		Vector2 sidewards = transform.up * input.x * speed * Time.deltaTime;
+
+		currentSpeed = (input.x + input.y) * speed;
+
+		if (input.y == 0) {
+			rigidbodyP.MovePosition (rigidbodyP.position + sidewards);
+		} else {
+			rigidbodyP.MovePosition (rigidbodyP.position + forward);
+		}
+	}
+
+	public float GetSpeed () {
+		return currentSpeed;
+	}
+
+	// Function to Turn Player
+	void Turn () {
+		Vector3 worldPoint = Camera.main.ScreenToWorldPoint (Input.mousePosition)- transform.position;
+		if (worldPoint.x < -0.3 || worldPoint.x > 0.3 || worldPoint.y < -0.3 || worldPoint.y > 0.3) {
+			worldPoint.Normalize ();
+			float rot_Z = Mathf.Atan2 (worldPoint.y, worldPoint.x) * Mathf.Rad2Deg;
+			rigidbodyP.MoveRotation (rot_Z);
+		}
+	}
+}

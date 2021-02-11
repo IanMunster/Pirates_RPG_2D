@@ -1,0 +1,6 @@
+2D Pirate RPG
+
+Github:
+https://github.com/IanMunster/Pirates_RPG_2D
+Trello:
+https://trello.com/b/8CbhYDEx/2d-pirate-rpg

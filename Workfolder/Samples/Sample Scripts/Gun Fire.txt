@@ -1,0 +1,32 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class GunFire : MonoBehaviour {
+
+	[SerializeField] private Rigidbody2D bullet;
+	[SerializeField] private Transform barrelEnd;
+
+	[SerializeField] private float launchForce;
+	[SerializeField] private float reloadTime;
+
+	private float nextFire;
+
+	// Use this for initialization
+	void Start () {
+		
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		if (Input.GetButton("Fire1") && Time.time > nextFire) {
+			nextFire = Time.time + reloadTime;
+			Fire ();
+		}
+	}
+
+	void Fire () {
+		Rigidbody2D bulletInstance = Instantiate (bullet, barrelEnd.position, barrelEnd.rotation) as Rigidbody2D;
+		bulletInstance.velocity = launchForce * barrelEnd.right;
+	}
+}
